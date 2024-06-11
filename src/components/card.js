@@ -1,28 +1,23 @@
-const placesList = document.querySelector('.places__list'); // контейнер для карточек
-
-// @todo: Темплейт карточки
-
-// @todo: DOM узлы
-
 // @todo: Функция создания карточки
-function createCard({name, link}, cardDelete) {
+export function createCard({name, link}, cardDelete, likeCard, showImage) {
     const cardTemplate = document.querySelector('#card-template').content;
     const itemCard = cardTemplate.querySelector('.places__item').cloneNode(true);
     itemCard.querySelector('.card__image').src = link;
     itemCard.querySelector('.card__title').textContent = name;
-    itemCard.querySelector('.card__title').alt = name;
+    itemCard.querySelector('.card__image').alt = name;
     itemCard.querySelector('.card__delete-button').addEventListener('click', cardDelete);
+    itemCard.querySelector('.card__like-button').addEventListener('click', likeCard);
+    itemCard.querySelector('.card__image').addEventListener('click', () => {showImage(link, name);});
     return itemCard;
-} 
+}
 
 // @todo: Функция удаления карточки
-function cardDelete(evt) {
+export function cardDelete(evt) {
     const cardDel = evt.target.closest('.card');
     cardDel.remove();
 }
 
-// @todo: Вывести карточки на страницу
-initialCards.forEach((card) => {
-    const cardAdd = createCard(card, cardDelete);
-    placesList.append(cardAdd);
-});
+//функция лайка карточки
+export function likeCard(evt) {
+    evt.target.classList.toggle('card__like-button_is-active');
+}
