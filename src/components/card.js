@@ -2,12 +2,15 @@
 export function createCard({name, link}, cardDelete, likeCard, showImage) {
     const cardTemplate = document.querySelector('#card-template').content;
     const itemCard = cardTemplate.querySelector('.places__item').cloneNode(true);
-    itemCard.querySelector('.card__image').src = link;
-    itemCard.querySelector('.card__title').textContent = name;
-    itemCard.querySelector('.card__image').alt = name;
+    const cardImage = itemCard.querySelector('.card__image');
+    const cardTitle = itemCard.querySelector('.card__title');
+    cardImage.src = link;
+    cardImage.alt = name;
+    cardTitle.textContent = name;
+
     itemCard.querySelector('.card__delete-button').addEventListener('click', cardDelete);
     itemCard.querySelector('.card__like-button').addEventListener('click', likeCard);
-    itemCard.querySelector('.card__image').addEventListener('click', () => {showImage(link, name);});
+    cardImage.addEventListener('click', () => {showImage(link, name);});
     return itemCard;
 }
 
