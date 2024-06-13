@@ -38,6 +38,8 @@ initialCards.forEach((card) => {
 //обработчики события открытия попапов
 buttonOpenModalProfile.addEventListener('click', () => {
     openModal(modalProfile);
+    nameInput.value = profileTitle.textContent;
+    jobInput.value = profileDescription.textContent;
 });
 buttonOpenModalNewCard.addEventListener('click', () => {
     openModal(modalNewCard);
