@@ -8,6 +8,9 @@
 @import url('./__caption/popup__caption.css');
 @import url('./__image/popup__image.css');
 
+
+@import url('./__error/error.css');
+
 .popup {
   font-family: 'Inter', Arial, sans-serif;
   display: none;
@@ -20,4 +23,8 @@
   bottom: 0;
   right: 0;
   z-index: 10;
+}
+
+.popup__input:last-of-type {
+  margin-bottom: 0;
 }
