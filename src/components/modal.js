@@ -22,6 +22,6 @@ export function closeModalEsc(evt) {
 // закрытие попапа нажатием на оверлей
 export function closeModalOverlay(evt) {
 	if (evt.target.classList.contains('popup')) {
-		closeModal(document.querySelector('.popup_is-opened'));
+        closeModal(evt.target);
 	}
 }

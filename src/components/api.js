@@ -15,23 +15,27 @@ function handleResponse(res) {
     return Promise.reject(`Ошибка: ${res.status}`);
 }
 
+// Универсальная функция запроса с проверкой ответа
+function request(url, options) {
+    return fetch(url, options)
+        .then(handleResponse);
+}
+
 // Запрос загрузки информации о пользователе с сервера
 export function getProfileInfo() {
-    return fetch(`${config.baseUrl}/users/me`, {
+    return request(`${config.baseUrl}/users/me`, {
         headers: config.headers})
-        .then(res => handleResponse(res))
 } 
 
 // Запрос карточек с сервера
 export function getInitialCards() {
-    return fetch(`${config.baseUrl}/cards`, {
+    return request(`${config.baseUrl}/cards`, {
         headers: config.headers})
-        .then(res => handleResponse(res))
 } 
 
 // Запрос обновления информации о пользователе
 export function updateProfileInfo(profile) {
-    return fetch(`${config.baseUrl}/users/me`, {
+    return request(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
@@ -39,12 +43,11 @@ export function updateProfileInfo(profile) {
             about: profile.about
         }),
     })
-    .then(res => handleResponse(res))
 }
 
 // Запрос добавления новой карточки
 export function addCard(card) {
-    return fetch(`${config.baseUrl}/cards`, {
+    return request(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: config.headers,
         body: JSON.stringify({
@@ -52,41 +55,36 @@ export function addCard(card) {
             link: card.link
         }),
     })
-    .then(res => handleResponse(res))
 }
 
 // Запрос удаления карточки, добавленной владельцем сайта
 export function deleteMyCard(cardId) {
-    return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    return request(`${config.baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
         headers: config.headers})
-        .then(res => handleResponse(res))
 }
 
 // Запрос добавления лайка
 export function addLike(cardId) {
-    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    return request(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'PUT',
         headers: config.headers})
-        .then(res => handleResponse(res))
 }
 
 // Запрос снятия лайка
 export function deleteLike(cardId) {
-    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    return request(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'DELETE',
         headers: config.headers})
-        .then(res => handleResponse(res))
 }
 
 // Запрос на изменение аватарки
 export function newAvatar(link) {
-    return fetch(`${config.baseUrl}/users/me/avatar`, {
+    return request(`${config.baseUrl}/users/me/avatar`, {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
             avatar: link,
         })
     })
-        .then(res => handleResponse(res))
 }

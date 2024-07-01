@@ -14,7 +14,7 @@ const buttonOpenModalProfile = document.querySelector('.profile__edit-button'); 
 const buttonOpenModalNewCard = document.querySelector('.profile__add-button'); //кнопка открытия модального окна Новая карточка
 const buttonOpenModalNewAvatar = document.querySelector('.profile__image'); //кнопка открытия модального окна Новый аватар
 
-const buttonClosePopup = document.querySelectorAll('.popup__close'); // кнопка закрытия модальных окон
+const popupCloseButtons = document.querySelectorAll('.popup__close'); // кнопка закрытия модальных окон
 
 const formElementProfile = modalProfile.querySelector('.popup__form'); // Находим форму ПРОФИЛЬ в DOM
 const nameInput  = formElementProfile.querySelector('.popup__input_type_name'); // Находим поля формы в DOM => Имя
@@ -34,8 +34,6 @@ const popupCaption = popupTypeImage.querySelector('.popup__caption');
 const formElementAvatar = modalNewAvatar.querySelector('.popup__form'); // Находим форму аватара в DOM
 const urlAvatar = formElementAvatar.querySelector('.popup__input_type_url_img'); // Находим поле формы аватара  в DOM => Ссылка на изображение
 const avatarImg = document.querySelector('.profile__image');
-
-const popupButton = document.querySelector('.popup__button');
 
 let userId = null;
 
@@ -66,7 +64,7 @@ buttonOpenModalNewAvatar.addEventListener('click', () => {
 });
 
 // обработчик события закрытия попапов
-buttonClosePopup.forEach((item) => {
+popupCloseButtons.forEach((item) => {
     item.addEventListener("click", () => {
       const modalElement = item.closest('.popup');
       closeModal(modalElement);
@@ -76,19 +74,18 @@ buttonClosePopup.forEach((item) => {
 //функция обработчик отправки формы изменения аватарки
 function handleFormSubmitAvatar(evt) {
     evt.preventDefault();
-    popupButton.textContent = 'Сохранение...';
+    evt.submitter.textContent = "Сохранение...";
     const newLinkAvatar = urlAvatar.value;
     newAvatar(newLinkAvatar)
         .then((newLink) => {
             avatarImg.style.backgroundImage = `url(${newLink.avatar})`;
-            // formElementAvatar.reset();
             closeModal(modalNewAvatar);
         })
         .catch((error) => {
             console.error(error);
         })
         .finally(() => {
-            popupButton.textContent = 'Сохранить';
+            evt.submitter.textContent = "Сохранить";
         })
     formElementAvatar.reset();
 }
@@ -99,7 +96,7 @@ formElementAvatar.addEventListener('submit', handleFormSubmitAvatar);
 //функция обработчик отправки формы редактирования профиля
 function handleFormSubmitProfile(evt) {
     evt.preventDefault(); 
-    popupButton.textContent = 'Сохранение...';
+    evt.submitter.textContent = 'Сохранение...';
     const userData = {
         name: nameInput.value,
         about: jobInput.value};
@@ -107,16 +104,14 @@ function handleFormSubmitProfile(evt) {
         .then(() => {
             profileTitle.textContent = nameInput.value;
             profileDescription.textContent = jobInput.value;
-            // formElementProfile.reset();
             closeModal(modalProfile);
         })
         .catch((error) => {
             console.error(error);
         })
         .finally(() => {
-            popupButton.textContent = 'Сохранить';
+            evt.submitter.textContent = 'Сохранить';
         })
-    // formElementProfile.reset();
 }
 
 // Изменить данные при нажатии на кнопку "Сохранить"
@@ -125,7 +120,7 @@ formElementProfile.addEventListener('submit', handleFormSubmitProfile);
 //функция обработчик отправки формы добавление карточки
 function handleFormSubmitCard(evt) {
     evt.preventDefault();
-    popupButton.textContent = 'Создать';
+    evt.submitter.textContent = 'Создать';
     const newCard = {
         name: imageName.value,
         link: urlImage.value,
@@ -133,14 +128,13 @@ function handleFormSubmitCard(evt) {
     addCard(newCard)
         .then((newCardData) => {
             placesList.prepend(createCard(newCardData, newCardData.owner._id, cardDelete, likeCard, showImage));
-            // formElementCard.reset();
             closeModal(modalNewCard);
         })
         .catch((error) => {
             console.error(error);
         })
         .finally(() => {
-            popupButton.textContent = 'Сохранить';
+            evt.submitter.textContent = 'Сохранить';
         })
     formElementCard.reset();
 }
@@ -159,22 +153,6 @@ function showImage(link, name) {
 // вызов валидации
 enableValidation(validationConfig);
 
-getProfileInfo()
-  .then((result) => {
-    console.log(result)// обрабатываем результат
-  })
-  .catch((err) => {
-    console.log(err); // выводим ошибку в консоль
-});
-
-getInitialCards()
-  .then((result) => {
-    console.log(result)// обрабатываем результат
-  })
-  .catch((err) => {
-    console.log(err); // выводим ошибку в консоль
-});
-
 // Загрузка данных пользователя и карточек
 Promise.all([getProfileInfo(), getInitialCards()])
     .then(([userData, initialCards]) => {
@@ -188,5 +166,5 @@ Promise.all([getProfileInfo(), getInitialCards()])
         });
     })
     .catch(error => {
-        return Promise.reject(`Ошибка: ${error.status}`);
+        console.error('Ошибка: ', error);
     })
